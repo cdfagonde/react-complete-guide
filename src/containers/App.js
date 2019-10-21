@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import './App.css';
-import Person from './Person/Person';
+import classes from './App.css';
+import Persons from '../components/Persons/Persons';
+import Cockpit from '../components/Cockpit/Cockpit';
+// import ErrorBoundary from '../components/ErrorBoundary/ErrorBoundary';
 
 class App extends Component {
   state = {
@@ -60,57 +62,27 @@ class App extends Component {
   }
 
   render() {
-    const buttonStyle = {
-      /* backgroundColor: 'white', */
-      backgroundColor: 'green',
-      color: 'white',
-      font: 'inherit',
-      border: '1px solid blue',
-      padding: '8px',
-      cursor: 'pointer',
-      width: '200px'
-    }
-
+    
     // Aqui montamos o display condicional..
     let persons = null;
+
     if(this.state.showPersons) {
       persons = (
-          <div>
-            {this.state.persons.map( (prs,ind) => {
-              return <Person
-                          name={prs.name}
-                          age={prs.age}
-                          click={ () => this.deletePersonHandler(ind) }
-                          key={prs.id}
-                          changed={ event => this.nameChangedHandler(event,prs.id) }
-                          />
-            })}
-          </div>
-        );
-        // Fundo vermelho quando 'hide'
-        buttonStyle.backgroundColor = 'red';
-        buttonStyle[':hover'] = {
-        backgroundColor: 'salmon',
-        color: 'black'
-      }
-    }
-
-    const classes = [];
-    if(this.state.persons.length <= 2) {
-      classes.push('red');   // [ 'red' ]
-    }
-    if(this.state.persons.length <= 1) {
-      classes.push('bold');   // [  'red','bold' ]
+            <Persons
+                persons={ this.state.persons }
+                clicked={ this.deletePersonHandler }
+                changed={ this.nameChangedHandler } />
+      );
     }
 
 
     return (
-      <div className="App">
-        <h1>Hi, Sou uma App React</h1>
-        <p className={classes.join(' ')}> This is really working! </p>
-        <button
-          style={buttonStyle} 
-          onClick={ this.togglePersonsHandler }> { this.state.showPersons ? "Hide" : "Show" } Persons </button>
+      <div className={ classes.App } >
+        <Cockpit
+            title={this.props.appTitle}
+            showPersons={ this.state.showPersons }
+            persons={ this.state.persons }
+            clicked={ this.togglePersonsHandler } />
         { persons }
       </div>
     );
